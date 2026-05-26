@@ -1,0 +1,30 @@
+{
+  "version": "1.0",
+  "updated": "2026-05-26",
+  "routes": {
+    "query": {
+      "quick": "wiki/index.md",
+      "full": "wiki/concepts/"
+    },
+    "ingest": {
+      "source": "_raw/",
+      "archive": "raw/",
+      "output": "wiki/",
+      "manifest": ".manifest.json"
+    },
+    "context": {
+      "L0": "CLAUDE.md",
+      "L1": ["wiki/purpose.md", "wiki/index.md"],
+      "L2": "ai/L2_detail/",
+      "L3": "wiki/concepts/"
+    },
+    "reports": {
+      "daily": "wiki/reports/daily/",
+      "weekly": "wiki/reports/weekly/"
+    },
+    "export": {
+      "output": "wiki/graphs/",
+      "formats": ["graph.json", "graph.graphml", "graph.cypher", "graph.html"]
+    }
+  }
+}
