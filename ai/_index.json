@@ -25,6 +25,12 @@
     "export": {
       "output": "wiki/graphs/",
       "formats": ["graph.json", "graph.graphml", "graph.cypher", "graph.html"]
+    },
+    "claude-history": {
+      "source": "~/.claude/history.jsonl",
+      "sessions": "~/.claude/projects/",
+      "output": "wiki/concepts/",
+      "maxSessions": 50
     }
   }
 }
