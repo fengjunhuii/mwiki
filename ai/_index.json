@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated": "2026-05-26",
+  "updated": "2026-05-27",
   "routes": {
     "query": {
       "quick": "wiki/index.md",
@@ -13,8 +13,8 @@
       "manifest": ".manifest.json"
     },
     "context": {
-      "L0": "CLAUDE.md",
-      "L1": ["wiki/purpose.md", "wiki/index.md"],
+      "L0": "ai/L0_profile.md",
+      "L1": ["wiki/purpose.md", "ai/L1_architecture.md", "wiki/index.md"],
       "L2": "ai/L2_detail/",
       "L3": "wiki/concepts/"
     },

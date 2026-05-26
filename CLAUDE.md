@@ -1,3 +1,17 @@
+---
+l0_context: "ai/L0_profile.md"
+l1_context:
+  - "wiki/purpose.md"
+  - "ai/L1_architecture.md"
+l2_context: "ai/L2_detail/"
+l3_context: "wiki/concepts/"
+token_budget:
+  L0: "~200 token，每次会话必读"
+  L1: "~1-2K token，会话开始时读"
+  L2: "~2-5K token，搜索定位时读"
+  L3: "5-20K token，深度读写时读"
+---
+
 # mwiki 知识库配置
 
 ## 编码规范
