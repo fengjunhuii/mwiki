@@ -45,7 +45,24 @@ description: 四阶段全量导入 _raw/ 素材到 wiki/（Ingest → Extract �
    - `tags`：根据内容推断 2-5 个标签
    - `sources`：`["_raw/文件名"]`
    - `status`：`active`
-   - `entity_type`：推断类型（`concept` / `tool` / `overview` / `pattern` / `comparison`）
+   - `entity_type`：按下方「entity_type 推断规则」推断
+
+### 1.1.1 entity_type 推断规则
+
+按以下优先级**从高到低**逐条匹配，命中第一条即停止：
+
+| 优先级 | entity_type | 匹配信号 |
+|--------|------------|---------|
+| 1 | `comparison` | 文中出现"对比""比较""vs""选型""优劣""替代方案"等对比语义，或含表格对比多个方案 |
+| 2 | `tool` | 文中主体描述某个软件/框架/库/平台，出现"安装""配置""使用方法""API"等工具特征词 |
+| 3 | `event` | 文中主体描述某个发布/突破/历史节点，出现具体日期+事件描述，或"发布""上线""突破"等事件词 |
+| 4 | `person` | 文中主体描述某个人物/团队/组织，出现"简介""贡献""成就""所属"等人物特征词 |
+| 5 | `pattern` | 文中主体描述某种方法论/流程/最佳实践，出现"步骤""流程""方案""实践"等模式特征词 |
+| 6 | `overview` | 文中主体是对某个领域/子领域的总览，出现"概述""总览""入门""全景"等总览特征词 |
+| 7 | `concept` | 默认兜底：抽象概念、理论、算法、术语定义 |
+
+> **推断仅作初始分类**，用户可随时手动修正 frontmatter 中的 `entity_type` 字段。
+
 6. **计算 SHA256**：对文件原始内容计算 SHA256 hash
 7. **记录到 manifest**：将文件信息暂存（Stage 4 统一写入）
 
@@ -112,9 +129,21 @@ description: 四阶段全量导入 _raw/ 素材到 wiki/（Ingest → Extract �
 
 ### 3.2 创建概念页
 
-对每个合并后的概念，创建 `wiki/concepts/概念名.md`（文件名使用 kebab-case）：
+对每个合并后的概念，根据其 `entity_type` 使用对应模板创建页面（文件名使用 kebab-case）：
 
-1. **Frontmatter**：
+1. **根据 entity_type 选择模板**：
+
+   | entity_type | 模板文件 | 目标子目录 |
+   |------------|---------|-----------|
+   | `concept` | `templates/concept-template.md` | `wiki/concepts/` |
+   | `tool` | `templates/tool-template.md` | `wiki/concepts/` |
+   | `person` | `templates/person-template.md` | `wiki/concepts/` |
+   | `event` | `templates/event-template.md` | `wiki/concepts/` |
+   | `comparison` | `templates/comparison-template.md` | `wiki/comparisons/` |
+   | `pattern` | `templates/pattern-template.md` | `wiki/patterns/` |
+   | `overview` | `templates/overview-template.md` | `wiki/topics/` |
+
+2. **Frontmatter**（所有类型通用）：
    ```yaml
    ---
    title: "概念名"
@@ -124,16 +153,18 @@ description: 四阶段全量导入 _raw/ 素材到 wiki/（Ingest → Extract �
    sources: [来源文件列表]
    summary: "概念的一句话描述"
    status: active
-   entity_type: concept
+   entity_type: <推断的类型>
    ---
    ```
 
-2. **内容结构**（参考 `templates/concept-template.md`）：
-   - `## 定义`：合并所有来源的定义描述
-   - `## 核心要点`：从各来源提取的关键要点
-   - `## 应用场景`：实际应用案例
-   - `## 局限性`：限制和注意事项
-   - `## 相关概念`：使用 `[[wikilinks]]` 链接
+3. **内容结构**：按对应模板的章节填充：
+   - `concept`：定义 → 核心要点 → 应用场景 → 局限性 → 相关概念
+   - `tool`：功能 → 安装 → 使用场景 → 替代方案 → 相关概念
+   - `person`：简介 → 贡献 → 关联项目 → 相关概念
+   - `event`：时间线 → 背景 → 影响 → 相关概念
+   - `comparison`：对比维度 → 优劣分析 → 选型建议 → Counter-Arguments
+   - `pattern`：问题描述 → 解决方案 → 适用条件 → 注意事项 → Counter-Arguments
+   - `overview`：范围 → 核心概念 → 学习路径 → 相关概念
 
 ### 3.3 冲突处理
 
