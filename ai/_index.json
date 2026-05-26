@@ -39,6 +39,15 @@
       "maxReplacementsPerRun": 200,
       "maxReplacementsPerFile": 30,
       "maxPerTermPerFile": 3
+    },
+    "human": {
+      "source": "wiki/",
+      "output": {
+        "handbook": "human/PROJECT_WIKI.md",
+        "business_qa": "human/BUSINESS_QA.md"
+      },
+      "noEditMarker": "<!-- no-edit -->",
+      "truthSource": "wiki/"
     }
   }
 }
