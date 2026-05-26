@@ -31,6 +31,14 @@
       "sessions": "~/.claude/projects/",
       "output": "wiki/concepts/",
       "maxSessions": 50
+    },
+    "cross-linker": {
+      "source": "wiki/concepts/",
+      "scan": ["wiki/concepts/", "wiki/topics/", "wiki/comparisons/", "wiki/patterns/", "wiki/"],
+      "exclude": ["_raw/", "raw/", "wiki/graphs/", "wiki/reports/", "wiki/log.md"],
+      "maxReplacementsPerRun": 200,
+      "maxReplacementsPerFile": 30,
+      "maxPerTermPerFile": 3
     }
   }
 }
