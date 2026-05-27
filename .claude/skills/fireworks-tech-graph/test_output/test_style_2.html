@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Style 2 - Terminal - Tech Diagram</title>
+    <style>
+        /* Base CSS Variables - Style 5 Glassmorphism Default */
+        :root {
+            --bg-gradient-start: #0d1117;
+            --bg-gradient-mid: #161b22;
+            --bg-gradient-end: #0d1117;
+
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-stroke: rgba(255, 255, 255, 0.15);
+            --glass-highlight: rgba(255, 255, 255, 0.25);
+
+            --text-primary: #f0f6fc;
+            --text-secondary: #8b949e;
+
+            --glow-blue: rgba(88, 166, 255, 0.3);
+            --glow-purple: rgba(188, 140, 255, 0.3);
+            --glow-green: rgba(63, 185, 80, 0.3);
+            --glow-orange: rgba(247, 129, 102, 0.3);
+
+            --accent-blue: #58a6ff;
+            --accent-purple: #bc8cff;
+            --accent-green: #3fb950;
+            --accent-orange: #f78166;
+
+            --radius-md: 12px;
+            --radius-lg: 16px;
+
+            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        /* Reset & Base */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-mid), var(--bg-gradient-end));
+            min-height: 100vh;
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        /* Ambient Glow Background */
+        .ambient-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .glow-spot {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.6;
+        }
+
+        .glow-spot.blue {
+            background: radial-gradient(circle, var(--glow-blue) 0%, transparent 70%);
+            width: 600px;
+            height: 600px;
+            top: 20%;
+            left: 10%;
+        }
+
+        .glow-spot.purple {
+            background: radial-gradient(circle, var(--glow-purple) 0%, transparent 70%);
+            width: 500px;
+            height: 500px;
+            bottom: 20%;
+            right: 10%;
+        }
+
+        /* Container */
+        .diagram-container {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .header .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+        }
+
+        /* Diagram Wrapper */
+        .diagram-wrapper {
+            position: relative;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-stroke);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .diagram-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--glass-highlight), transparent);
+            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+        }
+
+        /* SVG Container */
+        .svg-container {
+            position: relative;
+            width: 100%;
+            height: auto;
+            overflow: hidden;
+            border-radius: var(--radius-md);
+        }
+
+        .svg-container svg {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        /* Control Bar */
+        .control-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 20px;
+            padding: 16px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-stroke);
+            border-radius: var(--radius-md);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .control-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border: 1px solid var(--glass-stroke);
+            border-radius: 8px;
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--glass-highlight);
+            transform: translateY(-1px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn.primary {
+            background: rgba(88, 166, 255, 0.15);
+            border-color: var(--accent-blue);
+            color: var(--accent-blue);
+        }
+
+        .btn.primary:hover {
+            background: rgba(88, 166, 255, 0.25);
+        }
+
+        /* Style Selector */
+        .style-selector {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .style-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            border: 2px solid var(--glass-stroke);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .style-btn:hover {
+            transform: scale(1.1);
+            border-color: var(--glass-highlight);
+        }
+
+        .style-btn.active {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 12px var(--glow-blue);
+        }
+
+        .style-btn::after {
+            content: attr(data-style);
+            position: absolute;
+            bottom: -24px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+
+        .style-btn.style-1 { background: linear-gradient(135deg, #ffffff, #f0f0f0); }
+        .style-btn.style-2 { background: linear-gradient(135deg, #1a1a2e, #16213e); }
+        .style-btn.style-3 { background: linear-gradient(135deg, #1a1a1a, #4a4a4a); }
+        .style-btn.style-4 { background: linear-gradient(135deg, #ffffff, #f5f5f7); }
+        .style-btn.style-5 { background: linear-gradient(135deg, #0d1117, #161b22); }
+        .style-btn.style-6 { background: linear-gradient(135deg, #d97706, #f59e0b); }
+        .style-btn.style-7 { background: linear-gradient(135deg, #10a37f, #1a7f64); }
+
+        /* Zoom Controls */
+        .zoom-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .zoom-display {
+            min-width: 60px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Legend */
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-top: 20px;
+            padding: 16px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-stroke);
+            border-radius: var(--radius-md);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .legend-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            border: 1px solid var(--glass-stroke);
+        }
+
+        .legend-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* Info Panel */
+        .info-panel {
+            margin-top: 20px;
+            padding: 16px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-stroke);
+            border-radius: var(--radius-md);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .info-panel h3 {
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        .info-panel p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            padding: 20px;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .control-bar {
+                flex-direction: column;
+            }
+
+            .style-selector {
+                justify-content: center;
+            }
+
+            .legend {
+                flex-direction: column;
+            }
+        }
+
+        /* Fullscreen Mode */
+        .fullscreen .diagram-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            margin: 0;
+            border-radius: 0;
+            z-index: 9999;
+        }
+
+        .fullscreen .svg-container {
+            height: 100%;
+        }
+
+        /* Loading State */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--glass-stroke);
+            border-top-color: var(--accent-blue);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Print Styles */
+        @media print {
+            .ambient-glow,
+            .control-bar,
+            .footer {
+                display: none !important;
+            }
+
+            body {
+                background: white;
+            }
+
+            .diagram-wrapper {
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Ambient Glow Background -->
+    <div class="ambient-glow">
+        <div class="glow-spot blue"></div>
+        <div class="glow-spot purple"></div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="diagram-container">
+        <!-- Header -->
+        <header class="header">
+            <h1>Style 2 - Terminal</h1>
+            <p class="subtitle">Testing terminal style</p>
+        </header>
+
+        <!-- Diagram Wrapper -->
+        <div class="diagram-wrapper">
+            <!-- SVG Container -->
+            <div class="svg-container" id="svgContainer">
+                <?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0d1117"/>
+      <stop offset="100%" style="stop-color:#161b22"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="600" fill="url(#bg)"/>
+
+  <!-- Simple diagram elements -->
+  <rect x="50" y="50" width="200" height="100" rx="8"
+        fill="rgba(255,255,255,0.05)"
+        stroke="rgba(255,255,255,0.15)"
+        stroke-width="1"/>
+
+  <text x="150" y="100" text-anchor="middle"
+        font-family="Arial, sans-serif"
+        font-size="16"
+        font-weight="600"
+        fill="#f0f6fc">Component A</text>
+
+  <rect x="350" y="50" width="200" height="100" rx="8"
+        fill="rgba(255,255,255,0.05)"
+        stroke="rgba(255,255,255,0.15)"
+        stroke-width="1"/>
+
+  <text x="450" y="100" text-anchor="middle"
+        font-family="Arial, sans-serif"
+        font-size="16"
+        font-weight="600"
+        fill="#f0f6fc">Component B</text>
+
+  <!-- Arrow -->
+  <path d="M 250 100 L 350 100"
+        stroke="#58a6ff"
+        stroke-width="2"
+        fill="none"
+        marker-end="url(#arrow)"/>
+
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="7"
+            refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#58a6ff"/>
+    </marker>
+  </defs>
+</svg>
+            </div>
+
+            <!-- Control Bar -->
+            <div class="control-bar">
+                <!-- Style Selector -->
+                <div class="control-group">
+                    <span class="control-label">Style:</span>
+                    <div class="style-selector">
+                        <button class="style-btn style-1 active" data-style="1" title="Flat"></button>
+                        <button class="style-btn style-2" data-style="2" title="Dark Terminal"></button>
+                        <button class="style-btn style-3" data-style="3" title="Blueprint"></button>
+                        <button class="style-btn style-4" data-style="4" title="Notion Clean"></button>
+                        <button class="style-btn style-5" data-style="5" title="Glassmorphism"></button>
+                        <button class="style-btn style-6" data-style="6" title="Claude"></button>
+                        <button class="style-btn style-7" data-style="7" title="OpenAI"></button>
+                    </div>
+                </div>
+
+                <!-- Zoom Controls -->
+                <div class="control-group zoom-controls">
+                    <span class="control-label">Zoom:</span>
+                    <button class="btn" id="zoomOut" title="Zoom Out">−</button>
+                    <span class="zoom-display" id="zoomDisplay">100%</span>
+                    <button class="btn" id="zoomIn" title="Zoom In">+</button>
+                    <button class="btn" id="zoomReset" title="Reset Zoom">Reset</button>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="control-group">
+                    <button class="btn" id="fullscreenBtn" title="Toggle Fullscreen">⛶</button>
+                    <button class="btn primary" id="exportBtn" title="Export as PNG">Export</button>
+                    <button class="btn" id="copyBtn" title="Copy SVG to Clipboard">Copy</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Legend -->
+        
+
+        <!-- Info Panel -->
+        
+
+        <!-- Footer -->
+        <footer class="footer">
+            Generated with Fireworks Tech Graph{{else}}Generated with Fireworks Tech Graph
+        </footer>
+    </div>
+
+    <script>
+        // State Management
+        const state = {
+            currentStyle: 5,
+            zoom: 1,
+            isFullscreen: false,
+            originalSVG: null
+        };
+
+        // DOM Elements
+        const svgContainer = document.getElementById('svgContainer');
+        const styleButtons = document.querySelectorAll('.style-btn');
+        const zoomDisplay = document.getElementById('zoomDisplay');
+
+        // Initialize
+        function init() {
+            state.originalSVG = svgContainer.innerHTML;
+            bindEvents();
+        }
+
+        // Event Binding
+        function bindEvents() {
+            // Style Selection
+            styleButtons.forEach(btn => {
+                btn.addEventListener('click', () => switchStyle(parseInt(btn.dataset.style)));
+            });
+
+            // Zoom Controls
+            document.getElementById('zoomIn').addEventListener('click', () => zoomIn());
+            document.getElementById('zoomOut').addEventListener('click', () => zoomOut());
+            document.getElementById('zoomReset').addEventListener('click', () => zoomReset());
+
+            // Action Buttons
+            document.getElementById('fullscreenBtn').addEventListener('click', toggleFullscreen);
+            document.getElementById('exportBtn').addEventListener('click', exportAsPNG);
+            document.getElementById('copyBtn').addEventListener('click', copySVGToClipboard);
+
+            // Keyboard Shortcuts
+            document.addEventListener('keydown', handleKeyboard);
+        }
+
+        // Style Switching
+        function switchStyle(styleNum) {
+            if (styleNum === state.currentStyle) return;
+
+            state.currentStyle = styleNum;
+
+            // Update active button
+            styleButtons.forEach(btn => {
+                btn.classList.toggle('active', parseInt(btn.dataset.style) === styleNum);
+            });
+
+            // Apply style-specific CSS variables
+            applyStyleVariables(styleNum);
+        }
+
+        function applyStyleVariables(styleNum) {
+            const root = document.documentElement;
+            const styles = {
+                1: { // Flat
+                    '--bg-gradient-start': '#ffffff',
+                    '--bg-gradient-mid': '#f5f5f5',
+                    '--bg-gradient-end': '#ffffff',
+                    '--glass-bg': 'rgba(0, 0, 0, 0.02)',
+                    '--glass-stroke': 'rgba(0, 0, 0, 0.1)',
+                    '--text-primary': '#1a1a1a',
+                    '--text-secondary': '#666666'
+                },
+                2: { // Dark Terminal
+                    '--bg-gradient-start': '#1a1a2e',
+                    '--bg-gradient-mid': '#16213e',
+                    '--bg-gradient-end': '#1a1a2e',
+                    '--glass-bg': 'rgba(0, 255, 0, 0.03)',
+                    '--glass-stroke': 'rgba(0, 255, 0, 0.2)',
+                    '--text-primary': '#00ff00',
+                    '--text-secondary': '#00cc00'
+                },
+                3: { // Blueprint
+                    '--bg-gradient-start': '#1a3a5c',
+                    '--bg-gradient-mid': '#2d5a87',
+                    '--bg-gradient-end': '#1a3a5c',
+                    '--glass-bg': 'rgba(255, 255, 255, 0.05)',
+                    '--glass-stroke': 'rgba(255, 255, 255, 0.2)',
+                    '--text-primary': '#ffffff',
+                    '--text-secondary': '#a0c0e0'
+                },
+                4: { // Notion Clean
+                    '--bg-gradient-start': '#ffffff',
+                    '--bg-gradient-mid': '#f7f6f3',
+                    '--bg-gradient-end': '#ffffff',
+                    '--glass-bg': 'rgba(0, 0, 0, 0.02)',
+                    '--glass-stroke': 'rgba(0, 0, 0, 0.08)',
+                    '--text-primary': '#37352f',
+                    '--text-secondary': '#787774'
+                },
+                5: { // Glassmorphism (default)
+                    '--bg-gradient-start': '#0d1117',
+                    '--bg-gradient-mid': '#161b22',
+                    '--bg-gradient-end': '#0d1117',
+                    '--glass-bg': 'rgba(255, 255, 255, 0.05)',
+                    '--glass-stroke': 'rgba(255, 255, 255, 0.15)',
+                    '--text-primary': '#f0f6fc',
+                    '--text-secondary': '#8b949e'
+                },
+                6: { // Claude
+                    '--bg-gradient-start': '#d97706',
+                    '--bg-gradient-mid': '#f59e0b',
+                    '--bg-gradient-end': '#d97706',
+                    '--glass-bg': 'rgba(255, 255, 255, 0.1)',
+                    '--glass-stroke': 'rgba(255, 255, 255, 0.3)',
+                    '--text-primary': '#1a1a1a',
+                    '--text-secondary': '#4a4a4a'
+                },
+                7: { // OpenAI
+                    '--bg-gradient-start': '#10a37f',
+                    '--bg-gradient-mid': '#1a7f64',
+                    '--bg-gradient-end': '#10a37f',
+                    '--glass-bg': 'rgba(255, 255, 255, 0.1)',
+                    '--glass-stroke': 'rgba(255, 255, 255, 0.3)',
+                    '--text-primary': '#ffffff',
+                    '--text-secondary': '#a0e0d0'
+                }
+            };
+
+            const style = styles[styleNum] || styles[5];
+            Object.entries(style).forEach(([key, value]) => {
+                root.style.setProperty(key, value);
+            });
+        }
+
+        // Zoom Functions
+        function zoomIn() {
+            state.zoom = Math.min(state.zoom + 0.1, 3);
+            applyZoom();
+        }
+
+        function zoomOut() {
+            state.zoom = Math.max(state.zoom - 0.1, 0.3);
+            applyZoom();
+        }
+
+        function zoomReset() {
+            state.zoom = 1;
+            applyZoom();
+        }
+
+        function applyZoom() {
+            const svg = svgContainer.querySelector('svg');
+            if (svg) {
+                svg.style.transform = `scale(${state.zoom})`;
+                svg.style.transformOrigin = 'center center';
+            }
+            zoomDisplay.textContent = `${Math.round(state.zoom * 100)}%`;
+        }
+
+        // Fullscreen Toggle
+        function toggleFullscreen() {
+            state.isFullscreen = !state.isFullscreen;
+            document.body.classList.toggle('fullscreen', state.isFullscreen);
+        }
+
+        // Export as PNG
+        function exportAsPNG() {
+            const svg = svgContainer.querySelector('svg');
+            if (!svg) return;
+
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const svgData = new XMLSerializer().serializeToString(svg);
+            const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+            const url = URL.createObjectURL(svgBlob);
+
+            const img = new Image();
+            img.onload = function() {
+                canvas.width = img.width * 2; // 2x for better quality
+                canvas.height = img.height * 2;
+                ctx.scale(2, 2);
+                ctx.drawImage(img, 0, 0);
+
+                const pngUrl = canvas.toDataURL('image/png');
+                const downloadLink = document.createElement('a');
+                downloadLink.href = pngUrl;
+                downloadLink.download = 'style-2-terminal-diagram.png';
+                downloadLink.click();
+
+                URL.revokeObjectURL(url);
+            };
+            img.src = url;
+        }
+
+        // Copy SVG to Clipboard
+        async function copySVGToClipboard() {
+            const svg = svgContainer.querySelector('svg');
+            if (!svg) return;
+
+            try {
+                const svgData = new XMLSerializer().serializeToString(svg);
+                await navigator.clipboard.writeText(svgData);
+
+                // Visual feedback
+                const copyBtn = document.getElementById('copyBtn');
+                const originalText = copyBtn.textContent;
+                copyBtn.textContent = 'Copied!';
+                setTimeout(() => {
+                    copyBtn.textContent = originalText;
+                }, 2000);
+            } catch (err) {
+                console.error('Failed to copy SVG:', err);
+                alert('Failed to copy SVG to clipboard');
+            }
+        }
+
+        // Keyboard Shortcuts
+        function handleKeyboard(e) {
+            if (e.key === 'Escape' && state.isFullscreen) {
+                toggleFullscreen();
+            } else if (e.key === '+' || e.key === '=') {
+                zoomIn();
+            } else if (e.key === '-') {
+                zoomOut();
+            } else if (e.key === '0') {
+                zoomReset();
+            }
+        }
+
+        // Initialize on DOM ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    </script>
+</body>
+</html>

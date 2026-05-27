@@ -141,4 +141,4 @@ Ingest 阶段按优先级自动推断 `entity_type`：comparison > tool > event 
 
 **全局 Agent**（skills 安装到 `$HOME` 下）：Claude Code、Cursor、Codex、Gemini CLI、Hermes、OpenClaw、Aider、Copilot、Zed、PearAI
 
-**项目级 Agent**（skills 安装到 Vault 内）：Devika、Cline、Continue、Windsurf
+**项目级 Agent**（skills 安装到 Vault 内）：Devika

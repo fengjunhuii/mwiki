@@ -1,0 +1,101 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cargo --version)",
+      "Bash(cat:*)",
+      "Bash(cmd:*)",
+      "Bash(cp:*)",
+      "Bash(dir:*)",
+      "Bash(find:*)",
+      "Bash(git --version)",
+      "Bash(git add:*)",
+      "Bash(git branch:*)",
+      "Bash(git checkout:*)",
+      "Bash(git clone:*)",
+      "Bash(git commit:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git merge:*)",
+      "Bash(git mv:*)",
+      "Bash(git pull:*)",
+      "Bash(git push:*)",
+      "Bash(git status:*)",
+      "Bash(go version)",
+      "Bash(ls:*)",
+      "Bash(make:*)",
+      "Bash(mkdir:*)",
+      "Bash(node:*)",
+      "Bash(npx:*)",
+      "Bash(ping:*)",
+      "Bash(pip freeze:*)",
+      "Bash(pip list:*)",
+      "Bash(pip show:*)",
+      "Bash(powershell:*)",
+      "Bash(python3:*)",
+      "Bash(python:*)",
+      "Bash(rm:*)",
+      "Bash(rustc --version)",
+      "Bash(tree:*)",
+      "Bash(wc:*)",
+      "Bash(xargs:*)",
+      "Edit(*)",
+      "NotebookEdit(*)",
+      "Skill(*)",
+      "Write(*)",
+      "mcp__web-reader__webReader",
+      "mcp__web-search-prime__webSearchPrime",
+      "mcp__web_reader__webReader",
+      "mcp__zread__get_repo_structure",
+      "mcp__zread__read_file"
+    ],
+    "deny": [
+      "Read(*.env)",
+      "Read(*.log)",
+      "Read(*.pyc)",
+      "Read(*.pyo)",
+      "Read(*/__pycache__/)",
+      "Read(*/node_modules/)",
+      "Read(.venv/)",
+      "Read(__pycache__/)",
+      "Read(build/)",
+      "Read(dist/)",
+      "Read(node_modules/)",
+      "Read(service-account-key.json)",
+      "Read(venv/)"
+    ],
+    "ask": []
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}/.claude/scripts/detect-workflow-type.sh\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PROJECT_DIR}/.claude/scripts/validate-bash.sh\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  },
+  "env": {
+    "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "80"
+  },
+  "enabledPlugins": {
+    "oh-my-claudecode@omc": true,
+    "compound-knowledge@compound-knowledge-plugin": true
+  }
+}
