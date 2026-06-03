@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphstruct.org/graphml">
+  <key id="label" for="node" attr.name="label" attr.type="string"/>
+  <key id="entity_type" for="node" attr.name="entity_type" attr.type="string"/>
+  <key id="tags" for="node" attr.name="tags" attr.type="string"/>
+  <key id="color" for="node" attr.name="color" attr.type="string"/>
+  <key id="type" for="edge" attr.name="type" attr.type="string"/>
+  <graph id="mwiki" edgedefault="directed">
+    <node id="prompt-engineering"><data key="label">Prompt Engineering</data><data key="entity_type">concept</data><data key="tags">prompt-engineering,LLM,AI</data><data key="color">#4A90D9</data></node>
+    <node id="rag"><data key="label">RAG</data><data key="entity_type">concept</data><data key="tags">RAG,retrieval,LLM</data><data key="color">#4A90D9</data></node>
+    <node id="vector-embedding"><data key="label">向量嵌入</data><data key="entity_type">concept</data><data key="tags">vector-embedding,semantic-search</data><data key="color">#4A90D9</data></node>
+    <node id="llm"><data key="label">大语言模型</data><data key="entity_type">concept</data><data key="tags">LLM,transformer,AI</data><data key="color">#4A90D9</data></node>
+    <node id="chain-of-thought"><data key="label">Chain of Thought</data><data key="entity_type">concept</data><data key="tags">chain-of-thought,CoT,reasoning</data><data key="color">#4A90D9</data></node>
+    <node id="few-shot-learning"><data key="label">Few-shot Learning</data><data key="entity_type">concept</data><data key="tags">few-shot,in-context-learning</data><data key="color">#4A90D9</data></node>
+    <node id="transformer"><data key="label">Transformer</data><data key="entity_type">concept</data><data key="tags">transformer,attention,deep-learning</data><data key="color">#4A90D9</data></node>
+    <node id="vector-database"><data key="label">向量数据库</data><data key="entity_type">concept</data><data key="tags">vector-database,vector-search</data><data key="color">#4A90D9</data></node>
+    <node id="fine-tuning"><data key="label">Fine-tuning</data><data key="entity_type">concept</data><data key="tags">fine-tuning,model-training</data><data key="color">#4A90D9</data></node>
+    <node id="hallucination"><data key="label">幻觉</data><data key="entity_type">concept</data><data key="tags">hallucination,AI-safety</data><data key="color">#4A90D9</data></node>
+    <node id="cosine-similarity"><data key="label">余弦相似度</data><data key="entity_type">concept</data><data key="tags">cosine-similarity,similarity-metric</data><data key="color">#4A90D9</data></node>
+    <edge source="prompt-engineering" target="llm"><data key="type">wikilink</data></edge>
+    <edge source="prompt-engineering" target="vector-embedding"><data key="type">wikilink</data></edge>
+    <edge source="prompt-engineering" target="rag"><data key="type">wikilink</data></edge>
+    <edge source="prompt-engineering" target="chain-of-thought"><data key="type">wikilink</data></edge>
+    <edge source="prompt-engineering" target="few-shot-learning"><data key="type">wikilink</data></edge>
+    <edge source="rag" target="llm"><data key="type">wikilink</data></edge>
+    <edge source="rag" target="hallucination"><data key="type">wikilink</data></edge>
+    <edge source="rag" target="vector-embedding"><data key="type">wikilink</data></edge>
+    <edge source="rag" target="vector-database"><data key="type">wikilink</data></edge>
+    <edge source="rag" target="prompt-engineering"><data key="type">wikilink</data></edge>
+    <edge source="rag" target="fine-tuning"><data key="type">wikilink</data></edge>
+    <edge source="vector-embedding" target="rag"><data key="type">wikilink</data></edge>
+    <edge source="vector-embedding" target="llm"><data key="type">wikilink</data></edge>
+    <edge source="vector-embedding" target="vector-database"><data key="type">wikilink</data></edge>
+    <edge source="vector-embedding" target="cosine-similarity"><data key="type">wikilink</data></edge>
+    <edge source="llm" target="transformer"><data key="type">wikilink</data></edge>
+    <edge source="llm" target="prompt-engineering"><data key="type">wikilink</data></edge>
+    <edge source="llm" target="rag"><data key="type">wikilink</data></edge>
+    <edge source="llm" target="vector-embedding"><data key="type">wikilink</data></edge>
+    <edge source="llm" target="fine-tuning"><data key="type">wikilink</data></edge>
+    <edge source="llm" target="hallucination"><data key="type">wikilink</data></edge>
+    <edge source="chain-of-thought" target="prompt-engineering"><data key="type">wikilink</data></edge>
+    <edge source="chain-of-thought" target="few-shot-learning"><data key="type">wikilink</data></edge>
+    <edge source="chain-of-thought" target="llm"><data key="type">wikilink</data></edge>
+    <edge source="few-shot-learning" target="prompt-engineering"><data key="type">wikilink</data></edge>
+    <edge source="few-shot-learning" target="chain-of-thought"><data key="type">wikilink</data></edge>
+    <edge source="few-shot-learning" target="llm"><data key="type">wikilink</data></edge>
+    <edge source="transformer" target="llm"><data key="type">wikilink</data></edge>
+    <edge source="transformer" target="prompt-engineering"><data key="type">wikilink</data></edge>
+    <edge source="vector-database" target="vector-embedding"><data key="type">wikilink</data></edge>
+    <edge source="vector-database" target="rag"><data key="type">wikilink</data></edge>
+    <edge source="vector-database" target="cosine-similarity"><data key="type">wikilink</data></edge>
+    <edge source="fine-tuning" target="llm"><data key="type">wikilink</data></edge>
+    <edge source="fine-tuning" target="rag"><data key="type">wikilink</data></edge>
+    <edge source="hallucination" target="llm"><data key="type">wikilink</data></edge>
+    <edge source="hallucination" target="rag"><data key="type">wikilink</data></edge>
+    <edge source="hallucination" target="prompt-engineering"><data key="type">wikilink</data></edge>
+    <edge source="cosine-similarity" target="vector-embedding"><data key="type">wikilink</data></edge>
+    <edge source="cosine-similarity" target="vector-database"><data key="type">wikilink</data></edge>
+    <edge source="cosine-similarity" target="rag"><data key="type">wikilink</data></edge>
+  </graph>
+</graphml>

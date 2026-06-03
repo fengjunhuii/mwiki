@@ -1,0 +1,62 @@
+// mwiki 知识图谱 — 2026-05-27 生成
+// 节点数: 11, 边数: 40
+
+// 清除已有数据（可选，取消注释以启用）
+// MATCH (n) DETACH DELETE n;
+
+// 创建节点
+CREATE (n_prompt_engineering:Concept {id: 'prompt-engineering', label: 'Prompt Engineering', tags: ['prompt-engineering','LLM','AI','few-shot','chain-of-thought'], status: 'active', summary: '通过精心设计输入提示引导大语言模型生成高质量输出的技术'})
+CREATE (n_rag:Concept {id: 'rag', label: 'RAG（检索增强生成）', tags: ['RAG','retrieval-augmented-generation','LLM','vector-database','hallucination'], status: 'active', summary: '将信息检索与大语言模型生成结合的技术架构'})
+CREATE (n_vector_embedding:Concept {id: 'vector-embedding', label: '向量嵌入', tags: ['vector-embedding','semantic-search','similarity'], status: 'active', summary: '将非结构化数据转换为高维数值向量的技术'})
+CREATE (n_llm:Concept {id: 'llm', label: '大语言模型', tags: ['LLM','transformer','AI','GPT','Claude','deep-learning'], status: 'active', summary: '基于 Transformer 架构在海量文本上训练的深度学习模型'})
+CREATE (n_chain_of_thought:Concept {id: 'chain-of-thought', label: 'Chain of Thought', tags: ['chain-of-thought','CoT','reasoning','LLM'], status: 'active', summary: '要求大语言模型逐步推理的提示技术'})
+CREATE (n_few_shot_learning:Concept {id: 'few-shot-learning', label: 'Few-shot Learning', tags: ['few-shot','in-context-learning','LLM'], status: 'active', summary: '通过提供少量输入-输出示例引导模型理解期望模式'})
+CREATE (n_transformer:Concept {id: 'transformer', label: 'Transformer', tags: ['transformer','attention','deep-learning','neural-network'], status: 'active', summary: '基于自注意力机制的深度学习架构'})
+CREATE (n_vector_database:Concept {id: 'vector-database', label: '向量数据库', tags: ['vector-database','vector-search','similarity','embedding'], status: 'active', summary: '存储和检索向量数据的专用数据库'})
+CREATE (n_fine_tuning:Concept {id: 'fine-tuning', label: 'Fine-tuning', tags: ['fine-tuning','model-training','LLM','transfer-learning'], status: 'active', summary: '在预训练模型基础上使用特定领域数据进行二次训练'})
+CREATE (n_hallucination:Concept {id: 'hallucination', label: '幻觉', tags: ['hallucination','AI-safety','reliability'], status: 'active', summary: '大语言模型生成看似合理但实际错误的内容'})
+CREATE (n_cosine_similarity:Concept {id: 'cosine-similarity', label: '余弦相似度', tags: ['cosine-similarity','similarity-metric','vector','math'], status: 'active', summary: '衡量两个向量方向相似程度的指标'})
+
+// 创建关系
+CREATE (n_prompt_engineering)-[:REFERENCES]->(n_llm)
+CREATE (n_prompt_engineering)-[:REFERENCES]->(n_vector_embedding)
+CREATE (n_prompt_engineering)-[:REFERENCES]->(n_rag)
+CREATE (n_prompt_engineering)-[:REFERENCES]->(n_chain_of_thought)
+CREATE (n_prompt_engineering)-[:REFERENCES]->(n_few_shot_learning)
+CREATE (n_rag)-[:REFERENCES]->(n_llm)
+CREATE (n_rag)-[:REFERENCES]->(n_hallucination)
+CREATE (n_rag)-[:REFERENCES]->(n_vector_embedding)
+CREATE (n_rag)-[:REFERENCES]->(n_vector_database)
+CREATE (n_rag)-[:REFERENCES]->(n_prompt_engineering)
+CREATE (n_rag)-[:REFERENCES]->(n_fine_tuning)
+CREATE (n_vector_embedding)-[:REFERENCES]->(n_rag)
+CREATE (n_vector_embedding)-[:REFERENCES]->(n_llm)
+CREATE (n_vector_embedding)-[:REFERENCES]->(n_vector_database)
+CREATE (n_vector_embedding)-[:REFERENCES]->(n_cosine_similarity)
+CREATE (n_llm)-[:REFERENCES]->(n_transformer)
+CREATE (n_llm)-[:REFERENCES]->(n_prompt_engineering)
+CREATE (n_llm)-[:REFERENCES]->(n_rag)
+CREATE (n_llm)-[:REFERENCES]->(n_vector_embedding)
+CREATE (n_llm)-[:REFERENCES]->(n_fine_tuning)
+CREATE (n_llm)-[:REFERENCES]->(n_hallucination)
+CREATE (n_chain_of_thought)-[:REFERENCES]->(n_prompt_engineering)
+CREATE (n_chain_of_thought)-[:REFERENCES]->(n_few_shot_learning)
+CREATE (n_chain_of_thought)-[:REFERENCES]->(n_llm)
+CREATE (n_few_shot_learning)-[:REFERENCES]->(n_prompt_engineering)
+CREATE (n_few_shot_learning)-[:REFERENCES]->(n_chain_of_thought)
+CREATE (n_few_shot_learning)-[:REFERENCES]->(n_llm)
+CREATE (n_transformer)-[:REFERENCES]->(n_llm)
+CREATE (n_transformer)-[:REFERENCES]->(n_prompt_engineering)
+CREATE (n_vector_database)-[:REFERENCES]->(n_vector_embedding)
+CREATE (n_vector_database)-[:REFERENCES]->(n_rag)
+CREATE (n_vector_database)-[:REFERENCES]->(n_cosine_similarity)
+CREATE (n_fine_tuning)-[:REFERENCES]->(n_llm)
+CREATE (n_fine_tuning)-[:REFERENCES]->(n_rag)
+CREATE (n_hallucination)-[:REFERENCES]->(n_llm)
+CREATE (n_hallucination)-[:REFERENCES]->(n_rag)
+CREATE (n_hallucination)-[:REFERENCES]->(n_prompt_engineering)
+CREATE (n_cosine_similarity)-[:REFERENCES]->(n_vector_embedding)
+CREATE (n_cosine_similarity)-[:REFERENCES]->(n_vector_database)
+CREATE (n_cosine_similarity)-[:REFERENCES]->(n_rag)
+
+;

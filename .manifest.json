@@ -1,11 +1,54 @@
 {
   "version": "1.0",
   "created": "2026-05-26",
-  "updated": "2026-05-26",
-  "files": {},
+  "updated": "2026-05-27",
+  "files": {
+    "01-prompt-engineering.md": {
+      "sha256": "ad24c47370553451e45159748c7234514025140ba749b2b66a78bd153f9116e5",
+      "processedAt": "2026-05-27T15:30:00",
+      "status": "success",
+      "concepts": ["Prompt Engineering", "Chain of Thought", "Few-shot Learning", "Zero-shot Prompting"],
+      "entityType": "concept"
+    },
+    "02-rag-basics.md": {
+      "sha256": "8c0e3ca8ef47e2d5b390c507d81b57ae0aebef286a7ad6c722de0f17d313fd8b",
+      "processedAt": "2026-05-27T15:30:00",
+      "status": "success",
+      "concepts": ["RAG", "向量嵌入", "向量数据库", "幻觉", "Fine-tuning"],
+      "entityType": "concept"
+    },
+    "03-vector-embedding.md": {
+      "sha256": "197c7ddd7453cbd1089b8b85de9e078454e0a84e65566ee8307d2974d4018520",
+      "processedAt": "2026-05-27T15:30:00",
+      "status": "success",
+      "concepts": ["向量嵌入", "余弦相似度", "向量数据库"],
+      "entityType": "concept"
+    },
+    "04-prompt-basics.md": {
+      "sha256": "debade6ec1223006ff8b024e8ae1d224ce17c51320a563ee5cf14789c971e5d4",
+      "processedAt": "2026-05-27T15:30:00",
+      "status": "success",
+      "concepts": ["Prompt Engineering", "Chain of Thought", "Few-shot Learning"],
+      "entityType": "concept"
+    },
+    "05-llm-overview.md": {
+      "sha256": "af029b7eb6b9b890553f6212e30fe238a38d8a9b13cb977d16e218d172900c91",
+      "processedAt": "2026-05-27T15:30:00",
+      "status": "success",
+      "concepts": ["大语言模型", "Transformer", "幻觉", "Fine-tuning"],
+      "entityType": "overview"
+    },
+    "06-quick-notes.md": {
+      "sha256": "f91490c5fe9a0defe20ce1751260a96aacbc1a0c5fd7e7ff3f5e679feae08cfe",
+      "processedAt": "2026-05-27T15:30:00",
+      "status": "low-yield",
+      "concepts": [],
+      "entityType": "concept"
+    }
+  },
   "stats": {
-    "totalFiles": 0,
-    "totalConcepts": 0,
-    "lastIngest": null
+    "totalFiles": 6,
+    "totalConcepts": 11,
+    "lastIngest": "2026-05-27T15:30:00"
   }
 }

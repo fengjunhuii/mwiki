@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>mwiki 知识图谱</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #1a1a2e; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+canvas { display: block; }
+#legend { position: fixed; top: 16px; left: 16px; background: rgba(26,26,46,0.9); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 12px 16px; color: #ccc; font-size: 13px; z-index: 10; }
+#legend h3 { color: #fff; font-size: 14px; margin-bottom: 8px; }
+#legend .item { display: flex; align-items: center; gap: 8px; margin: 4px 0; }
+#legend .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+#stats { position: fixed; top: 16px; right: 16px; background: rgba(26,26,46,0.9); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 12px 16px; color: #aaa; font-size: 12px; z-index: 10; text-align: right; }
+#stats .num { color: #4A90D9; font-size: 20px; font-weight: bold; }
+#tooltip { position: fixed; display: none; background: rgba(20,20,40,0.95); border: 1px solid rgba(74,144,217,0.4); border-radius: 6px; padding: 10px 14px; color: #eee; font-size: 13px; z-index: 20; max-width: 260px; pointer-events: none; }
+#tooltip .tt-label { font-size: 15px; font-weight: bold; color: #fff; margin-bottom: 4px; }
+#tooltip .tt-type { color: #4A90D9; font-size: 12px; margin-bottom: 4px; }
+#tooltip .tt-tags { color: #888; font-size: 11px; }
+</style>
+</head>
+<body>
+<canvas id="graph"></canvas>
+<div id="legend">
+  <h3>mwiki 知识图谱</h3>
+  <div class="item"><div class="dot" style="background:#4A90D9"></div><span>concept (11)</span></div>
+  <div class="item"><div class="dot" style="background:#95A6C8"></div><span>overview (3)</span></div>
+</div>
+<div id="stats">
+  <div><span class="num">14</span> 节点</div>
+  <div><span class="num">40</span> 条关系</div>
+  <div style="margin-top:6px;color:#666">拖拽节点 | 滚轮缩放</div>
+</div>
+<div id="tooltip"></div>
+<script>
+const GRAPH_DATA = {"nodes":[{"id":"prompt-engineering","label":"Prompt Engineering","entity_type":"concept","tags":["prompt-engineering","LLM","AI","few-shot","chain-of-thought"],"color":"#4A90D9"},{"id":"rag","label":"RAG（检索增强生成）","entity_type":"concept","tags":["RAG","retrieval-augmented-generation","LLM"],"color":"#4A90D9"},{"id":"vector-embedding","label":"向量嵌入","entity_type":"concept","tags":["vector-embedding","semantic-search"],"color":"#4A90D9"},{"id":"llm","label":"大语言模型","entity_type":"concept","tags":["LLM","transformer","AI","GPT","Claude"],"color":"#4A90D9"},{"id":"chain-of-thought","label":"Chain of Thought","entity_type":"concept","tags":["chain-of-thought","CoT","reasoning"],"color":"#4A90D9"},{"id":"few-shot-learning","label":"Few-shot Learning","entity_type":"concept","tags":["few-shot","in-context-learning"],"color":"#4A90D9"},{"id":"transformer","label":"Transformer","entity_type":"concept","tags":["transformer","attention"],"color":"#4A90D9"},{"id":"vector-database","label":"向量数据库","entity_type":"concept","tags":["vector-database","vector-search"],"color":"#4A90D9"},{"id":"fine-tuning","label":"Fine-tuning","entity_type":"concept","tags":["fine-tuning","model-training"],"color":"#4A90D9"},{"id":"hallucination","label":"幻觉","entity_type":"concept","tags":["hallucination","AI-safety"],"color":"#4A90D9"},{"id":"cosine-similarity","label":"余弦相似度","entity_type":"concept","tags":["cosine-similarity","similarity-metric"],"color":"#4A90D9"},{"id":"index","label":"全局概念索引","entity_type":"overview","tags":["meta","index"],"color":"#95A6C8"},{"id":"log","label":"操作历史日志","entity_type":"overview","tags":["meta","log"],"color":"#95A6C8"},{"id":"purpose","label":"知识库目标","entity_type":"overview","tags":["meta","purpose"],"color":"#95A6C8"}],"edges":[{"source":"prompt-engineering","target":"llm"},{"source":"prompt-engineering","target":"vector-embedding"},{"source":"prompt-engineering","target":"rag"},{"source":"prompt-engineering","target":"chain-of-thought"},{"source":"prompt-engineering","target":"few-shot-learning"},{"source":"rag","target":"llm"},{"source":"rag","target":"hallucination"},{"source":"rag","target":"vector-embedding"},{"source":"rag","target":"vector-database"},{"source":"rag","target":"prompt-engineering"},{"source":"rag","target":"fine-tuning"},{"source":"vector-embedding","target":"rag"},{"source":"vector-embedding","target":"llm"},{"source":"vector-embedding","target":"vector-database"},{"source":"vector-embedding","target":"cosine-similarity"},{"source":"llm","target":"transformer"},{"source":"llm","target":"prompt-engineering"},{"source":"llm","target":"rag"},{"source":"llm","target":"vector-embedding"},{"source":"llm","target":"fine-tuning"},{"source":"llm","target":"hallucination"},{"source":"chain-of-thought","target":"prompt-engineering"},{"source":"chain-of-thought","target":"few-shot-learning"},{"source":"chain-of-thought","target":"llm"},{"source":"few-shot-learning","target":"prompt-engineering"},{"source":"few-shot-learning","target":"chain-of-thought"},{"source":"few-shot-learning","target":"llm"},{"source":"transformer","target":"llm"},{"source":"transformer","target":"prompt-engineering"},{"source":"vector-database","target":"vector-embedding"},{"source":"vector-database","target":"rag"},{"source":"vector-database","target":"cosine-similarity"},{"source":"fine-tuning","target":"llm"},{"source":"fine-tuning","target":"rag"},{"source":"hallucination","target":"llm"},{"source":"hallucination","target":"rag"},{"source":"hallucination","target":"prompt-engineering"},{"source":"cosine-similarity","target":"vector-embedding"},{"source":"cosine-similarity","target":"vector-database"},{"source":"cosine-similarity","target":"rag"}]};
+
+const canvas = document.getElementById('graph');
+const ctx = canvas.getContext('2d');
+const tooltip = document.getElementById('tooltip');
+
+let W, H, scale = 1, offsetX = 0, offsetY = 0;
+const nodes = GRAPH_DATA.nodes.map(n => ({...n, x: 0, y: 0, vx: 0, vy: 0, r: n.entity_type === 'overview' ? 8 : n.id === 'llm' || n.id === 'prompt-engineering' || n.id === 'rag' ? 18 : 12}));
+const nodeMap = {};
+nodes.forEach(n => nodeMap[n.id] = n);
+const edges = GRAPH_DATA.edges.map(e => ({source: nodeMap[e.source], target: nodeMap[e.target]})).filter(e => e.source && e.target);
+
+function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+window.addEventListener('resize', resize);
+resize();
+
+nodes.forEach((n, i) => { n.x = W/2 + (Math.cos(i * 2 * Math.PI / nodes.length) * 200); n.y = H/2 + (Math.sin(i * 2 * Math.PI / nodes.length) * 200); });
+
+function simulate() {
+  const repulsion = 3000, attraction = 0.005, damping = 0.9;
+  for (let i = 0; i < nodes.length; i++) {
+    for (let j = i+1; j < nodes.length; j++) {
+      let dx = nodes[j].x - nodes[i].x, dy = nodes[j].y - nodes[i].y;
+      let dist = Math.sqrt(dx*dx + dy*dy) || 1;
+      let f = repulsion / (dist * dist);
+      nodes[i].vx -= dx/dist * f; nodes[i].vy -= dy/dist * f;
+      nodes[j].vx += dx/dist * f; nodes[j].vy += dy/dist * f;
+    }
+  }
+  edges.forEach(e => {
+    let dx = e.target.x - e.source.x, dy = e.target.y - e.source.y;
+    let dist = Math.sqrt(dx*dx + dy*dy) || 1;
+    let f = (dist - 150) * attraction;
+    e.source.vx += dx/dist * f; e.source.vy += dy/dist * f;
+    e.target.vx -= dx/dist * f; e.target.vy -= dy/dist * f;
+  });
+  nodes.forEach(n => { n.vx += (W/2 - n.x) * 0.0003; n.vy += (H/2 - n.y) * 0.0003; n.vx *= damping; n.vy *= damping; n.x += n.vx; n.y += n.vy; });
+}
+
+let dragging = null, hovered = null, selected = null;
+function toScreen(x, y) { return {x: (x + offsetX) * scale + W/2, y: (y + offsetY) * scale + H/2}; }
+function fromScreen(sx, sy) { return {x: (sx - W/2) / scale - offsetX, y: (sy - H/2) / scale - offsetY}; }
+
+function draw() {
+  simulate();
+  ctx.clearRect(0, 0, W, H);
+  ctx.save();
+  ctx.translate(W/2, H/2);
+  ctx.scale(scale, scale);
+  ctx.translate(offsetX, offsetY);
+
+  const activeSet = new Set();
+  if (selected) {
+    activeSet.add(selected.id);
+    edges.forEach(e => { if (e.source === selected) activeSet.add(e.target.id); if (e.target === selected) activeSet.add(e.source.id); });
+  }
+
+  edges.forEach(e => {
+    const dim = selected && (!activeSet.has(e.source.id) || !activeSet.has(e.target.id));
+    ctx.beginPath();
+    ctx.moveTo(e.source.x, e.source.y);
+    ctx.lineTo(e.target.x, e.target.y);
+    ctx.strokeStyle = dim ? 'rgba(255,255,255,0.03)' : 'rgba(255,255,255,0.12)';
+    ctx.lineWidth = dim ? 0.5 : 1;
+    ctx.stroke();
+  });
+
+  nodes.forEach(n => {
+    const dim = selected && !activeSet.has(n.id);
+    ctx.beginPath();
+    ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+    ctx.fillStyle = dim ? n.color + '33' : (hovered === n ? '#fff' : n.color);
+    ctx.fill();
+    if (!dim) {
+      ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+    if (!dim || n === selected) {
+      ctx.fillStyle = dim ? 'rgba(255,255,255,0.2)' : '#ddd';
+      ctx.font = `${n.r > 14 ? 12 : 10}px sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.fillText(n.label.length > 10 ? n.label.slice(0,10)+'…' : n.label, n.x, n.y + n.r + 14);
+    }
+  });
+
+  ctx.restore();
+  requestAnimationFrame(draw);
+}
+
+canvas.addEventListener('mousemove', e => {
+  const p = fromScreen(e.clientX, e.clientY);
+  let found = null;
+  for (const n of nodes) { const dx = p.x - n.x, dy = p.y - n.y; if (dx*dx + dy*dy < (n.r+4)*(n.r+4)) { found = n; break; } }
+  hovered = found;
+  canvas.style.cursor = found ? 'pointer' : 'default';
+  if (found) {
+    tooltip.style.display = 'block';
+    tooltip.style.left = (e.clientX + 16) + 'px';
+    tooltip.style.top = (e.clientY + 16) + 'px';
+    tooltip.innerHTML = `<div class="tt-label">${found.label}</div><div class="tt-type">${found.entity_type}</div><div class="tt-tags">${found.tags.join(', ')}</div>`;
+  } else { tooltip.style.display = 'none'; }
+  if (dragging) { dragging.x = p.x; dragging.y = p.y; dragging.vx = 0; dragging.vy = 0; }
+});
+
+canvas.addEventListener('mousedown', e => {
+  const p = fromScreen(e.clientX, e.clientY);
+  for (const n of nodes) { const dx = p.x - n.x, dy = p.y - n.y; if (dx*dx + dy*dy < (n.r+4)*(n.r+4)) { dragging = n; return; } }
+  selected = selected ? null : null;
+});
+
+canvas.addEventListener('mouseup', () => { dragging = null; });
+canvas.addEventListener('click', e => {
+  const p = fromScreen(e.clientX, e.clientY);
+  for (const n of nodes) { const dx = p.x - n.x, dy = p.y - n.y; if (dx*dx + dy*dy < (n.r+4)*(n.r+4)) { selected = selected === n ? null : n; return; } }
+  selected = null;
+});
+canvas.addEventListener('wheel', e => { e.preventDefault(); const d = e.deltaY > 0 ? 0.9 : 1.1; scale = Math.max(0.3, Math.min(3, scale * d)); }, {passive: false});
+
+draw();
+</script>
+</body>
+</html>

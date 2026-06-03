@@ -17,7 +17,17 @@ entity_type: overview
 
 | 概念 | 标签 | 来源数 | 状态 |
 |------|------|--------|------|
-<!-- 概念条目将由 Agent 自动添加，格式：| [[概念名]] | tag1, tag2 | N | active | -->
+| [[Chain of Thought]] | chain-of-thought, CoT, reasoning | 2 | active |
+| [[Few-shot Learning]] | few-shot, in-context-learning | 2 | active |
+| [[Fine-tuning]] | fine-tuning, model-training | 2 | active |
+| [[Prompt Engineering]] | prompt-engineering, LLM, few-shot | 2 | active |
+| [[RAG]] | RAG, retrieval, vector-database | 3 | active |
+| [[Transformer]] | transformer, attention, deep-learning | 1 | active |
+| [[余弦相似度]] | cosine-similarity, similarity-metric | 1 | active |
+| [[向量嵌入]] | vector-embedding, semantic-search | 4 | active |
+| [[向量数据库]] | vector-database, vector-search | 2 | active |
+| [[大语言模型]] | LLM, transformer, AI | 5 | active |
+| [[幻觉]] | hallucination, AI-safety | 2 | active |
 
 ## 主题页
 

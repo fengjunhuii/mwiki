@@ -1,0 +1,74 @@
+---
+title: "大语言模型"
+created: 2026-05-27
+updated: 2026-05-27
+tags: [LLM, transformer, AI, GPT, Claude, deep-learning]
+sources:
+  - path: _raw/05-llm-overview.md
+    provenance: extracted
+summary: "基于 Transformer 架构在海量文本上训练的深度学习模型，能执行翻译、摘要、问答、代码生成等多种任务。"
+status: active
+entity_type: concept
+---
+
+# 大语言模型（LLM）
+
+## 定义
+
+大语言模型（Large Language Model, LLM）是基于 [[Transformer]] 架构、在海量文本数据上训练的深度学习模型。它能够理解和生成人类语言，执行翻译、摘要、问答、代码生成等多种任务。
+
+## 核心要点
+
+### 发展历程
+
+| 时间 | 里程碑 |
+|------|--------|
+| 2017 | [[Transformer]] 架构提出（Google, Attention Is All You Need） |
+| 2018 | GPT-1 / BERT 发布 |
+| 2019 | GPT-2（1.5B 参数） |
+| 2020 | GPT-3（175B 参数） |
+| 2022 | ChatGPT 发布，引爆 AI 应用浪潮 |
+| 2023 | GPT-4、Claude、Llama 系列开源模型 |
+| 2024-2025 | 多模态模型、Agent 架构、长上下文窗口 |
+
+### 主流 LLM 对比
+
+| 模型 | 提供方 | 特点 | 上下文窗口 |
+|------|--------|------|-----------|
+| GPT-4o | OpenAI | 多模态，综合能力强 | 128K |
+| Claude | Anthropic | 长文本，安全对齐 | 200K |
+| Gemini | Google | 多模态，搜索集成 | 1M+ |
+| Llama 3 | Meta | 开源，社区活跃 | 128K |
+| Qwen | 阿里巴巴 | 中文优秀，开源 | 128K |
+
+### 关键能力
+
+- **文本生成**：文章、代码、创意写作
+- **理解与推理**：阅读理解、逻辑推理
+- **多语言**：跨语言翻译和理解
+- **指令遵循**：按指令执行复杂任务
+- **工具调用**：Function Calling / Tool Use
+
+## 应用场景
+
+- [[Prompt Engineering]]：通过 prompt 设计优化输出
+- [[RAG]]：检索增强生成，减少[[幻觉]]
+- [[向量嵌入]]：语义表示的核心技术
+- [[Fine-tuning]]：模型微调适配特定任务
+
+## 局限性
+
+- **[[幻觉]]（Hallucination）**：生成看似合理但实际错误的内容
+- **知识截止**：训练数据有截止日期
+- **上下文窗口限制**：无法处理超长文档
+- **数学推理能力有限**
+- **安全性和偏见问题**
+
+## 相关概念
+
+- [[Transformer]]
+- [[Prompt Engineering]]
+- [[RAG]]
+- [[向量嵌入]]
+- [[Fine-tuning]]
+- [[幻觉]]
